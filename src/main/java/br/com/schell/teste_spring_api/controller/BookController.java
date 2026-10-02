@@ -42,4 +42,15 @@ public class BookController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> removeBook(@PathVariable UUID id) {
+        final boolean result = bookService.removeBook(id);
+
+        if (result) {
+            return ResponseEntity.ok().body(true);
+        } else {
+            return ResponseEntity.internalServerError().body(false);
+        }
+    }
 }

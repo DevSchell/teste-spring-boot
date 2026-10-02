@@ -54,4 +54,7 @@ public class BookService {
         return book;
     }
 
+    public boolean removeBook(UUID id) {
+        return books.removeIf(book -> book.getId().equals(id));
+    }
 }

@@ -1,13 +1,13 @@
 package br.com.schell.teste_spring_api.controller;
 
 import br.com.schell.teste_spring_api.database.entity.BookEntity;
+import br.com.schell.teste_spring_api.dto.BookDto;
 import br.com.schell.teste_spring_api.service.BookService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,4 +36,21 @@ public class BookController {
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<BookEntity> insertBook(@RequestBody @Valid BookDto bookDto) {
+        BookEntity savedBook = bookService.insertBook(bookDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> removeBook(@PathVariable UUID id) {
+        final boolean result = bookService.removeBook(id);
+
+        if (result) {
+            return ResponseEntity.ok().body(true);
+        } else {
+            return ResponseEntity.internalServerError().body(false);
+        }
+    }
 }
